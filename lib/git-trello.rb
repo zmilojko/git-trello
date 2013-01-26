@@ -13,12 +13,8 @@ class GitHook
 	@oauth_token = config[:oauth_token]
 	@repodir = Dir.pwd
 	@board_id = config[:board_id]
-	#typical configuration is that lists are: Doing (second list) and Done (third list)
-	#This is undocumented, but it seems Trello boards end with 0 and each list
-	#with an index of the list, starting with 1. So if not given list
-	#ids, we will remove the 0 and attach 2 and 3 respectively.
-	@list_id_in_progress = config[:list_id_in_progress] || "#{@board_id[0..-2]}2"
-	@list_id_done = config[:list_id_done] || "#{@board_id[0..-2]}3"
+	@list_id_in_progress = config[:list_id_in_progress]
+	@list_id_done = config[:list_id_done]
 	@commit_url_prefix = config[:commit_url_prefix]
 	
 	@http = Trello::HTTP.new(@oauth_token, @api_key)
@@ -55,7 +51,7 @@ class GitHook
 		when "close", "fix" then @list_id_done
 	  end
 
-	  puts "Trello: Moving card ##{match[3].to_i} to list #{target_list_id[0..-2]}"
+	  puts "Trello: Moving card ##{match[3].to_i} to list #{target_list_id}"
 
 	  # Add the commit comment
 	  message = "#{commit.author.name}:\n#{commit.message}"
