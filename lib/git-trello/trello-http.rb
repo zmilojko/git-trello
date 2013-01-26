@@ -1,3 +1,6 @@
+#Copyright (c) 2011 Zachary Anker
+#Minor modifications by Zeljko Milojkovic
+
 require "cgi"
 require "net/https"
 
