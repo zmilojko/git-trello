@@ -15,17 +15,26 @@ A gem for Git hooks.
 	    :board_id => 'TRELLO_BOARD_ID',
 	    :list_id_in_progress => 'LIST_ID_IN_PROGRESS',
 	    :list_id_done => 'LIST_ID_IN_DONE',
-	    :commit_url_prefix => 'https://code.augumenta.com/zmilojko/git-trello/commit/' 
+	    :commit_url_prefix => 'https://github.com/zmilojko/git-trello/commits/' 
 	  ).post_receive
 
 ###`API_KEY`
 https://trello.com/1/appKey/generate
 
 ###`OAUTH_TOKEN`
-https://trello.com/1/authorize?response_type=token&name=Trello+Github+Integration&scope=read,write&expiration=never&key=[YOUR API_KEY HERE]
+This is not so well explained in Trello, but I understood that you need to authorize the app with API_KEY to access each board separatelly. To do that:
+
+https://trello.com/1/authorize?response_type=token&name=[BOARD+NAME+AS+SHOWN+IN+URL]&scope=read,write&expiration=never&key=[YOUR+API_KEY+HERE]
+
+where [YOUR+API_KEY+HERE] is the one you entered in the previous step, while [BOARD+NAME+AS...] is, well, what it says. If your board is 
+
+https://trello.com/board/git-trello/5104d726d973fb4356000c5f
+
+then you should type in "git-trello".
+
 
 ###`TRELLO_BOARD_ID`
-It is the end of the URL when viewing the board. For example, for https://trello.com/board/trello-development/4d5ea62fd76aa1136000000c, board_id is 4d5ea62fd76aa1136000000c.
+It is the end of the URL when viewing the board. For example, for https://trello.com/board/git-trello/5104d726d973fb4356000c5f, board_id is 5104d726d973fb4356000c5f.
 
 ###`LIST_ID_IN_PROGRESS and LIST_ID_IN_DONE`
 List IDs seem to be a (board id + list index), where all are treated as hex numbers. However, this is undocumented.
