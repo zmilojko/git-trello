@@ -68,6 +68,10 @@ class GitHook
 		  @http.update_card(results["id"], to_update)
 		end
 	  end
+	  
+	  # If post-receive is given a block, execute it 
+	  # and pass everything you have to pass
+	  yield old_sha, new_sha, ref, commit, @repodir, @http if block_given?
 	  ""
 	end
   end
