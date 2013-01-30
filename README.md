@@ -3,20 +3,20 @@ A gem for Git hooks.
 
 #Instructions
 
-	$gem install git-trello
+    $gem install git-trello
     Successfully installed git-trello-0.0.1
     1 gem installed
     $ cat /path/to/my/repo.git/hooks/post-receive
     #!/usr/bin/ruby
     require 'git-trello'
-	GitHook.new(
-	    :api_key => 'API_KEY',
-	    :oauth_token => 'OAUTH_TOKEN',
-	    :board_id => 'TRELLO_BOARD_ID',
-	    :list_id_in_progress => 'LIST_ID_IN_PROGRESS',
-	    :list_id_done => 'LIST_ID_IN_DONE',
-	    :commit_url_prefix => 'https://github.com/zmilojko/git-trello/commits/' 
-	  ).post_receive
+    GitHook.new(
+    :api_key => 'API_KEY',
+        :oauth_token => 'OAUTH_TOKEN',
+        :board_id => 'TRELLO_BOARD_ID',
+        :list_id_in_progress => 'LIST_ID_IN_PROGRESS',
+        :list_id_done => 'LIST_ID_IN_DONE',
+        :commit_url_prefix => 'https://github.com/zmilojko/git-trello/commits/' 
+    ).post_receive
 
 ###`API_KEY`
 https://trello.com/1/appKey/generate
