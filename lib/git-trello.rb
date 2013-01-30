@@ -25,8 +25,6 @@ class GitHook
   end
   def post_receive
     while msg = gets
-      puts msg.inspect
-
       #get the data out of the input
       old_sha, new_sha, ref = msg.split(' ', 3)
 
