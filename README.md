@@ -3,20 +3,39 @@ A gem for Git hooks.
 
 #Instructions
 
-    $gem install git-trello
-    Successfully installed git-trello-0.0.1
-    1 gem installed
-    $ cat /path/to/my/repo.git/hooks/post-receive
-    #!/usr/bin/ruby
-    require 'git-trello'
-    GitHook.new(
-        :api_key => 'API_KEY',
-        :oauth_token => 'OAUTH_TOKEN',
-        :board_id => 'TRELLO_BOARD_ID',
-        :list_id_in_progress => 'LIST_ID_IN_PROGRESS',
-        :list_id_done => 'LIST_ID_IN_DONE',
-        :commit_url_prefix => 'https://github.com/zmilojko/git-trello/commits/' 
-    ).post_receive
+```bash
+$ gem install git-trello
+Successfully installed git-trello-0.0.1
+1 gem installed
+```
+
+And install a hook to your repo (`/path/to/my/repo.git/hooks/post-receive`)
+
+```ruby
+#!/usr/bin/ruby
+require 'git-trello'
+GitHook.new(
+    :api_key => 'API_KEY',
+    :oauth_token => 'OAUTH_TOKEN',
+    :board_id => 'TRELLO_BOARD_ID',
+    :list_id_in_progress => 'LIST_ID_IN_PROGRESS',
+    :list_id_done => 'LIST_ID_IN_DONE',
+    :commit_url_prefix => 'https://github.com/zmilojko/git-trello/commits/'
+).post_receive
+```
+An update hook is also available, which will deny any commit that doesn't reference a valid trello card
+(`/path/to/my/repo.git/hooks/update`)
+
+```ruby
+#!/usr/bin/ruby
+require 'git-trello'
+GitHook.new(
+    :api_key => 'API_KEY',
+    :oauth_token => 'OAUTH_TOKEN',
+    :board_id => 'TRELLO_BOARD_ID'
+).update
+```
+
 
 ###`API_KEY`
 https://trello.com/1/appKey/generate
@@ -26,7 +45,7 @@ This is not so well explained in Trello, but I understood that you need to autho
 
 https://trello.com/1/authorize?response_type=token&name=[BOARD+NAME+AS+SHOWN+IN+URL]&scope=read,write&expiration=never&key=[YOUR+API_KEY+HERE]
 
-where [YOUR+API_KEY+HERE] is the one you entered in the previous step, while [BOARD+NAME+AS...] is, well, what it says. If your board is 
+where [YOUR+API_KEY+HERE] is the one you entered in the previous step, while [BOARD+NAME+AS...] is, well, what it says. If your board is
 
 https://trello.com/board/git-trello/5104d726d973fb4356000c5f
 
