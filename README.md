@@ -10,7 +10,7 @@ A gem for Git hooks.
     #!/usr/bin/ruby
     require 'git-trello'
     GitHook.new(
-    :api_key => 'API_KEY',
+        :api_key => 'API_KEY',
         :oauth_token => 'OAUTH_TOKEN',
         :board_id => 'TRELLO_BOARD_ID',
         :list_id_in_progress => 'LIST_ID_IN_PROGRESS',
