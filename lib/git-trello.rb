@@ -21,14 +21,27 @@ class GitHook
   @repo = Grit::Repo.new(@repodir)
   end
   def test
-    puts 'git-trello post receive hook trigered just fine' 
+    puts 'git-trello post receive hook trigered just fine'
+  end
+  def update
+    abort "Usage: ref oldCommit newCommit" if ARGV.length != 3
+
+    # splat args into variables
+    ref, old_sha, new_sha = ARGV
+
+    commit = @repo.commit new_sha
+    if commit
+      match = matching_commit_message(commit)
+      abort "Did not detect trello reference commit message - aborting" unless match
+      abort "Did not reference a valid trello card" unless @http.get_card(@board_id, match[3].to_i)
+    end
   end
   def post_receive
     while msg = gets
       #get the data out of the input
       old_sha, new_sha, ref = msg.split(' ', 3)
 
-      # If post-receive is given a block, execute it 
+      # If post-receive is given a block, execute it
       # and pass everything you have to pass
       yield old_sha, new_sha, ref, @repodir, @http if block_given?
 
@@ -38,8 +51,8 @@ class GitHook
       #Following requries quite a bit of testing in case of merging
       until commit.nil? || commit.sha == old_sha
         # Figure out the card short id
-        match = commit.message.match(/((case|card|close|fix)e?s? \D?([0-9]+))/i)
-        next unless match and match[3].to_i > 0
+        match = matching_commit_message(commit)
+        next unless match
 
         puts "Trello: Commenting on the card ##{match[3].to_i}"
 
@@ -58,7 +71,7 @@ class GitHook
         end
 
         puts "Trello: Moving card ##{match[3].to_i} to list #{target_list_id}"
-      
+
         # Add the commit comment
         message = "#{commit.author.name}:\n#{commit.message}"
         message << "\n\n#{@commit_url_prefix}#{new_sha}" unless @commit_url_prefix.nil?
@@ -74,11 +87,17 @@ class GitHook
             @http.update_card(results["id"], to_update)
           end
         end
-        return if commit.parents.nil? || commit.parents.empty? 
+        return if commit.parents.nil? || commit.parents.empty?
         puts "now checking parents"
-        commit = commit.parents[0] 
-      end  
+        commit = commit.parents[0]
+      end
     end
+  end
+
+  private
+  def matching_commit_message(commit)
+    match = commit.message.match(/((case|card|close|fix)e?s? \D?([0-9]+))/i)
+    return match if match and match[3].to_i > 0
   end
 end
 
